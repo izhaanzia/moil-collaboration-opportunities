@@ -500,14 +500,15 @@
       .review-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 14px;
+        gap: 16px;
       }
 
       .review-item {
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: 10px;
         background: #fff;
-        padding: 16px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
       }
 
       .review-item.wide {
@@ -515,26 +516,31 @@
       }
 
       .review-label {
-        color: var(--muted);
-        font-size: 0.78rem;
+        color: var(--steel);
+        font-size: 0.72rem;
         font-weight: 800;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 1px solid var(--soft);
+        padding-bottom: 8px;
       }
 
       .review-value {
-        margin-top: 7px;
         white-space: pre-wrap;
-        line-height: 1.5;
+        line-height: 1.6;
+        color: var(--charcoal);
+        font-weight: 600;
       }
 
       .selection {
         display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 14px;
-        border-top: 1px solid var(--line);
-        padding: 14px 0;
+        flex-direction: column;
+        gap: 8px;
+        border-top: 1px solid var(--soft);
+        padding: 16px 0;
+        position: relative;
       }
 
       .selection:first-child {
@@ -542,21 +548,48 @@
         padding-top: 0;
       }
 
+      .selection-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
       .selection-title {
         font-weight: 800;
+        color: var(--blue);
+        font-size: 1rem;
+        line-height: 1.4;
+        flex: 1;
       }
 
       .selection-detail {
-        margin-top: 6px;
         color: #4d5660;
+        font-size: 0.94rem;
+        line-height: 1.6;
+        background: var(--soft);
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 4px;
       }
 
       .edit-link {
         flex: 0 0 auto;
-        border: 0;
-        background: transparent;
+        border: 1px solid var(--line);
+        background: #fff;
         color: var(--blue);
-        font-weight: 800;
+        font-weight: 700;
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        transition: all 160ms ease;
+      }
+
+      .edit-link:hover {
+        background: var(--blue);
+        color: #fff;
+        border-color: var(--blue);
       }
 
       /* Modal styles */
@@ -1244,11 +1277,11 @@
               .map(
                 (item) => `
                 <div class="selection">
-                  <div>
+                  <div class="selection-header">
                     <div class="selection-title">${escapeHtml(item.label)}</div>
-                    <div class="selection-detail">${escapeHtml(item.detail)}</div>
+                    <button type="button" class="edit-link" data-edit="${item.id}">Edit</button>
                   </div>
-                  <button type="button" class="edit-link" data-edit="${item.id}">Edit</button>
+                  <div class="selection-detail">${escapeHtml(item.detail)}</div>
                 </div>
               `,
               )
