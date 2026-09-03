@@ -2,7 +2,7 @@
   "name": "moil-innoprom-form",
   "version": "1.0.0",
   "description": "MOIL Collaboration Form",
-  "main": "api/submit.js",
+  "private": true,
   "dependencies": {
     "googleapis": "^144.0.0"
   },
