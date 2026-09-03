@@ -1,0 +1,10 @@
+{
+  "name": "moil-innoprom-form",
+  "version": "1.0.0",
+  "description": "MOIL Collaboration Form",
+  "main": "server.js",
+  "dependencies": {},
+  "engines": {
+    "node": "18.x"
+  }
+}
