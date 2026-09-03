@@ -7,17 +7,21 @@
     <style>
       :root {
         --primary: #2e3192;
-        --primary-container: #e0e0ff;
         --on-primary: #ffffff;
+        --primary-container: #e0e0ff;
+        --on-primary-container: #00006e;
         --secondary: #1f9bb4;
-        --surface: #ffffff;
-        --on-surface: #1c1b1f;
-        --surface-variant: #f4f4f9;
-        --outline: #79747e;
-        --error: #b00020;
-        --shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
-        --shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
-        --radius: 12px;
+        --surface: #fdfbff;
+        --on-surface: #1b1b1f;
+        --surface-variant: #e1e2ec;
+        --on-surface-variant: #44464f;
+        --outline: #757780;
+        --outline-variant: #c5c6d0;
+        --shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        --shadow-elevated: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1);
+        --radius-lg: 28px;
+        --radius-md: 16px;
+        --radius-sm: 8px;
       }
 
       * {
@@ -32,23 +36,45 @@
         margin: 0;
         min-height: 100vh;
         color: var(--on-surface);
-        font-family: 'Roboto', 'Inter', system-ui, sans-serif;
-        background-color: #f8f9fc;
-        background-image:
-          radial-gradient(at 0% 0%, rgba(46, 49, 146, 0.05) 0px, transparent 50%),
-          radial-gradient(at 100% 0%, rgba(31, 155, 180, 0.05) 0px, transparent 50%);
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background:
+          linear-gradient(135deg, rgba(46, 49, 146, 0.98), rgba(20, 22, 100, 0.92)),
+          radial-gradient(circle at 15% 20%, rgba(31, 155, 180, 0.25), transparent 35%),
+          linear-gradient(115deg, rgba(255, 255, 255, 0.04) 0 1px, transparent 1px 74px),
+          linear-gradient(25deg, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 62px),
+          #2e3192;
+        background-attachment: fixed;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.15;
+        background:
+          linear-gradient(150deg, transparent 0 47%, rgba(255, 255, 255, 0.2) 48% 49%, transparent 50%),
+          repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.05) 0 1px,
+            transparent 1px 112px
+          );
+        mask-image: linear-gradient(to bottom, black, transparent 85%);
       }
 
       .shell {
-        width: min(960px, calc(100% - 32px));
+        width: 100%;
+        max-width: 1000px;
         margin: 0 auto;
         padding: 40px 0 80px;
       }
 
       .hero {
+        color: white;
+        padding: 0 24px 48px;
         text-align: center;
-        margin-bottom: 48px;
-        padding: 0 16px;
+        position: relative;
+        z-index: 1;
       }
 
       .brand-row {
@@ -61,49 +87,47 @@
 
       .brand {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: 12px;
-        font-weight: 700;
-        font-size: 1.25rem;
-        letter-spacing: 0.05em;
-        color: var(--primary);
+        gap: 16px;
       }
 
       .brand-logo {
-        width: 48px;
-        height: 48px;
+        width: min(100%, 480px);
         background: white;
-        padding: 4px;
-        border-radius: 8px;
-        box-shadow: var(--shadow);
+        padding: 16px 24px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       }
 
       .brand-logo img {
+        display: block;
         width: 100%;
-        height: 100%;
+        height: auto;
         object-fit: contain;
       }
 
       .tag {
-        background: var(--primary-container);
-        color: var(--primary);
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
         padding: 6px 16px;
         border-radius: 100px;
-        font-size: 0.875rem;
+        font-size: 0.8rem;
         font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
       h1 {
         font-size: clamp(2rem, 5vw, 3rem);
         font-weight: 800;
-        color: var(--on-surface);
         margin: 16px 0;
         line-height: 1.2;
       }
 
       .subtitle {
         font-size: 1.125rem;
-        color: #4a4a4a;
+        opacity: 0.9;
         max-width: 700px;
         margin: 0 auto;
         line-height: 1.6;
@@ -111,27 +135,30 @@
 
       .supporting {
         font-size: 0.95rem;
-        color: #666;
+        opacity: 0.7;
         max-width: 600px;
         margin: 16px auto 0;
         line-height: 1.5;
       }
 
       .form-wrap {
+        position: relative;
+        z-index: 10;
+        margin: 0 16px;
         background: var(--surface);
-        border-radius: 24px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        border-radius: var(--radius-lg);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         overflow: hidden;
       }
 
       .progress {
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 50;
         background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        padding: 16px 32px;
-        border-bottom: 1px solid #eee;
+        backdrop-filter: blur(10px);
+        padding: 16px 24px;
+        border-bottom: 1px solid var(--outline-variant);
         display: flex;
         align-items: center;
         gap: 20px;
@@ -140,7 +167,7 @@
       .progress-track {
         flex: 1;
         height: 6px;
-        background: #e0e0e0;
+        background: var(--surface-variant);
         border-radius: 3px;
         overflow: hidden;
       }
@@ -153,31 +180,30 @@
       }
 
       .progress span {
-        font-weight: 600;
-        font-size: 0.875rem;
+        font-weight: 700;
         color: var(--primary);
-        min-width: 100px;
+        font-size: 0.85rem;
+        min-width: 90px;
+        text-align: right;
       }
 
       form {
-        padding: 32px;
+        padding: 24px;
         display: flex;
         flex-direction: column;
-        gap: 32px;
+        gap: 24px;
       }
 
       .panel {
-        background: var(--surface-variant);
-        border-radius: var(--radius);
-        padding: 0;
-        border: none;
+        background: #fff;
+        border: 1px solid var(--outline-variant);
+        border-radius: var(--radius-md);
         overflow: hidden;
       }
 
       .section-head {
-        padding: 24px 32px;
-        background: #fff;
-        border-bottom: 1px solid #f0f0f0;
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--outline-variant);
       }
 
       .section-eyebrow {
@@ -197,121 +223,122 @@
 
       .section-note {
         font-size: 0.9rem;
-        color: #666;
-        margin-top: 8px;
+        color: var(--on-surface-variant);
+        margin-top: 4px;
       }
 
       .grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 24px;
-        padding: 32px;
+        gap: 20px;
+        padding: 24px;
       }
 
       .field {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
       }
 
       label {
         font-weight: 600;
         font-size: 0.9rem;
-        color: #444;
+        color: var(--on-surface-variant);
       }
 
       .required {
-        color: var(--error);
+        color: #ba1a1a;
       }
 
       input, textarea {
         padding: 12px 16px;
-        border: 2px solid #e0e0e0;
+        border: 1px solid var(--outline);
         border-radius: 8px;
         font-size: 1rem;
+        background: #fff;
         transition: all 0.2s;
-        background: white;
       }
 
       input:focus, textarea:focus {
         border-color: var(--primary);
+        border-width: 2px;
         outline: none;
+        padding: 11px 15px;
         box-shadow: 0 0 0 4px rgba(46, 49, 146, 0.1);
       }
 
       .error {
-        font-size: 0.8rem;
-        color: var(--error);
+        font-size: 0.75rem;
+        color: #ba1a1a;
         height: 1rem;
         margin-top: 2px;
       }
 
       .area-list {
-        padding: 24px 32px 32px;
+        padding: 20px 24px 24px;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
       }
 
       .area-card {
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #e0e0e0;
+        background: var(--surface-variant);
+        border-radius: var(--radius-md);
+        border: 1px solid transparent;
         transition: all 0.2s;
       }
 
       .area-card:hover {
-        border-color: var(--primary);
-        box-shadow: var(--shadow-hover);
-      }
-
-      .area-card.complete {
-        border-left: 4px solid var(--secondary);
+        background: #e1e2ec;
       }
 
       .area-card.open {
+        background: #fff;
         border-color: var(--primary);
-        box-shadow: var(--shadow-hover);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
       }
 
       .card-button {
         width: 100%;
-        padding: 20px 24px;
+        padding: 20px;
         background: none;
         border: none;
         display: flex;
         align-items: center;
-        text-align: left;
         gap: 16px;
+        text-align: left;
+        cursor: pointer;
       }
 
       .number {
         width: 32px;
         height: 32px;
-        background: #f0f0f0;
-        border-radius: 50%;
+        background: #fff;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 0.875rem;
+        color: var(--primary);
+        box-shadow: var(--shadow);
         flex-shrink: 0;
       }
 
       .area-card.complete .number {
-        background: var(--secondary);
-        color: white;
+        background: #1e7b54;
+        color: #fff;
       }
 
       .card-title {
-        font-weight: 600;
-        font-size: 1.05rem;
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--on-surface);
         flex: 1;
       }
 
       .indicator {
-        font-size: 1.5rem;
-        color: #999;
+        font-size: 1.25rem;
+        color: var(--outline);
         transition: transform 0.3s;
       }
 
@@ -321,61 +348,82 @@
       }
 
       .card-body {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.3s;
       }
 
       .area-card.open .card-body {
-        max-height: 1000px;
+        grid-template-rows: 1fr;
+      }
+
+      .card-inner {
+        overflow: hidden;
       }
 
       .body-content {
-        padding: 0 24px 24px 72px;
+        padding: 0 20px 20px 68px;
       }
 
       .description {
         font-size: 0.95rem;
-        color: #555;
-        margin-bottom: 16px;
         line-height: 1.5;
+        color: var(--on-surface-variant);
+        margin-bottom: 16px;
+      }
+
+      .focus-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin: 0 0 16px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .focus-list li {
+        background: #fff;
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: 1px solid var(--outline-variant);
+        font-size: 0.85rem;
+        color: var(--on-surface);
       }
 
       .actions {
-        padding: 32px;
+        padding: 24px;
         display: flex;
         justify-content: flex-end;
-        background: white;
-        border-top: 1px solid #f0f0f0;
+        background: #fff;
+        border-top: 1px solid var(--outline-variant);
       }
 
       .btn {
         padding: 12px 32px;
         border-radius: 100px;
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 0.95rem;
         transition: all 0.2s;
         border: none;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        cursor: pointer;
       }
 
       .btn-primary {
         background: var(--primary);
         color: white;
-        box-shadow: 0 4px 12px rgba(46, 49, 146, 0.3);
+        box-shadow: 0 4px 10px rgba(46, 49, 146, 0.2);
       }
 
       .btn-primary:hover:not(:disabled) {
         background: #252877;
         transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(46, 49, 146, 0.4);
+        box-shadow: 0 6px 16px rgba(46, 49, 146, 0.3);
       }
 
       .btn-secondary {
-        background: white;
+        background: transparent;
         color: var(--primary);
-        border: 2px solid var(--primary);
+        border: 1px solid var(--outline);
         margin-right: 12px;
       }
 
@@ -384,56 +432,75 @@
       }
 
       .btn:disabled {
-        background: #ccc;
+        background: var(--surface-variant);
+        color: var(--on-surface-variant);
         cursor: not-allowed;
-        box-shadow: none;
       }
 
-      /* Modal and Review styling */
       .modal-overlay {
+        display: none;
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.5);
-        display: none;
-        place-items: center;
+        background: rgba(0, 0, 0, 0.5);
         z-index: 1000;
         padding: 20px;
-        backdrop-filter: blur(4px);
+        overflow-y: auto;
+        backdrop-filter: blur(8px);
       }
 
       .modal-overlay.visible {
-        display: grid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .modal-content {
-        background: white;
-        border-radius: 24px;
+        background: #fff;
+        border-radius: var(--radius-lg);
         width: 100%;
         max-width: 800px;
         max-height: 90vh;
         overflow-y: auto;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        box-shadow: var(--shadow-elevated);
+      }
+
+      .modal-header {
+        padding: 24px 32px;
+        border-bottom: 1px solid var(--outline-variant);
+      }
+
+      .modal-body {
+        padding: 32px;
+      }
+
+      .modal-footer {
+        padding: 24px 32px;
+        border-top: 1px solid var(--outline-variant);
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
       }
 
       .review-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 16px;
-        margin-top: 24px;
       }
 
       .review-item {
-        background: #f8f9fa;
+        background: var(--surface-variant);
         padding: 16px;
         border-radius: 12px;
       }
 
-      .review-item.wide { grid-column: 1 / -1; }
+      .review-item.wide {
+        grid-column: 1 / -1;
+      }
 
       .review-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 700;
-        color: #888;
+        color: var(--primary);
         text-transform: uppercase;
         margin-bottom: 4px;
         display: block;
@@ -447,23 +514,25 @@
       .selection {
         margin-top: 12px;
         padding-top: 12px;
-        border-top: 1px solid #eee;
+        border-top: 1px solid var(--outline-variant);
       }
 
       .selection-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 8px;
       }
 
       .selection-title {
         font-weight: 700;
+        font-size: 0.9rem;
         color: var(--primary);
       }
 
       .edit-link {
         color: var(--primary);
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         font-weight: 700;
         text-transform: uppercase;
         background: none;
@@ -472,32 +541,66 @@
       }
 
       .selection-detail {
-        margin-top: 8px;
         font-size: 0.9rem;
-        color: #555;
         background: #fff;
         padding: 12px;
         border-radius: 8px;
-        border: 1px solid #eee;
+        border: 1px solid var(--outline-variant);
+        color: var(--on-surface-variant);
       }
 
-      .final-panel {
-        background: var(--primary);
-        color: white;
+      .toast {
+        display: none;
+        margin-top: 20px;
+        border: 1px solid #1e7b54;
+        border-radius: 12px;
+        background: #eff8f4;
+        color: #14593c;
+        padding: 12px 16px;
+        font-weight: 600;
       }
 
-      .final-panel h2, .final-panel .section-eyebrow, .final-panel .section-note {
-        color: white;
+      .toast.visible {
+        display: block;
       }
 
       @media (max-width: 768px) {
-        .grid { grid-template-columns: 1fr; padding: 20px; }
-        .review-grid { grid-template-columns: 1fr; }
-        .shell { padding: 20px 0; }
+        .grid, .review-grid, .focus-list { grid-template-columns: 1fr; }
+        .hero { padding: 48px 16px 80px; border-radius: 0 0 24px 24px; }
         .hero h1 { font-size: 1.75rem; }
-        form { padding: 20px; }
-        .body-content { padding: 0 16px 16px 16px; }
-        .card-button { padding: 16px; }
+        .form-wrap { margin: 0 8px; border-radius: 20px; }
+        .actions, .modal-footer { flex-direction: column; }
+        .btn { width: 100%; margin: 0; }
+        .btn-secondary { margin-bottom: 8px; }
+      }
+
+      /* Language Switcher */
+      .lang-switcher {
+        display: flex;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 4px;
+        border-radius: 100px;
+        margin-top: 16px;
+      }
+
+      .lang-btn {
+        background: transparent;
+        border: none;
+        color: white;
+        padding: 6px 16px;
+        border-radius: 100px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        opacity: 0.6;
+      }
+
+      .lang-btn.active {
+        background: white;
+        color: var(--primary);
+        opacity: 1;
       }
     </style>
   </head>
@@ -507,18 +610,21 @@
         <div class="brand-row">
           <div class="brand" aria-label="MOIL Limited">
             <div class="brand-logo">
-              <img src="moil-logo.png" alt="MOIL Limited logo" />
+              <img src="moil-logo-full.png" alt="MOIL Limited logo" />
             </div>
-            <div>MOIL LIMITED</div>
           </div>
-          <div class="tag">Official Collaboration Interest Form</div>
+          <div class="tag" data-i18n="tag">Official Collaboration Interest Form</div>
+          <div class="lang-switcher">
+            <button type="button" class="lang-btn active" onclick="setLanguage('en')">EN</button>
+            <button type="button" class="lang-btn" onclick="setLanguage('ru')">RU</button>
+          </div>
         </div>
-        <h1>Areas for Collaboration &amp;<br>Technology Partnership</h1>
-        <p class="subtitle">
+        <h1 data-i18n="hero_title">Areas for Collaboration &amp;<br>Technology Partnership</h1>
+        <p class="subtitle" data-i18n="hero_subtitle">
           MOIL Limited invites Russian companies to explore potential areas of collaboration,
           technology partnership, joint ventures and knowledge sharing.
         </p>
-        <p class="supporting">
+        <p class="supporting" data-i18n="hero_supporting">
           Please indicate the areas where your company can offer technology, expertise, equipment,
           investment, joint venture opportunities or other forms of collaboration.
         </p>
@@ -534,29 +640,29 @@
           <section class="panel" id="company-section">
             <div class="section-head">
               <div>
-                <div class="section-eyebrow">Step 1</div>
-                <h2>Company Information</h2>
-                <p class="section-note">Tell us who will represent the company in this collaboration discussion.</p>
+                <div class="section-eyebrow" data-i18n="step1">Step 1</div>
+                <h2 data-i18n="company_info_title">Company Information</h2>
+                <p class="section-note" data-i18n="company_info_note">Tell us who will represent the company in this collaboration discussion.</p>
               </div>
             </div>
             <div class="grid">
               <div class="field">
-                <label for="email">Company Email <span class="required">*</span></label>
+                <label for="email"><span data-i18n="label_email">Company Email</span> <span class="required">*</span></label>
                 <input id="email" name="email" type="email" autocomplete="email" required />
                 <div class="error" data-error-for="email"></div>
               </div>
               <div class="field">
-                <label for="companyName">Company Name <span class="required">*</span></label>
+                <label for="companyName"><span data-i18n="label_company">Company Name</span> <span class="required">*</span></label>
                 <input id="companyName" name="companyName" type="text" autocomplete="organization" required />
                 <div class="error" data-error-for="companyName"></div>
               </div>
               <div class="field">
-                <label for="representative">Company Representative <span class="required">*</span></label>
+                <label for="representative"><span data-i18n="label_rep">Company Representative</span> <span class="required">*</span></label>
                 <input id="representative" name="representative" type="text" autocomplete="name" required />
                 <div class="error" data-error-for="representative"></div>
               </div>
               <div class="field">
-                <label for="contact">Contact Information <span class="required">*</span></label>
+                <label for="contact"><span data-i18n="label_contact">Contact Information</span> <span class="required">*</span></label>
                 <input id="contact" name="contact" type="tel" autocomplete="tel" required />
                 <div class="error" data-error-for="contact"></div>
               </div>
@@ -566,9 +672,9 @@
           <section class="panel" id="areas-section">
             <div class="section-head">
               <div>
-                <div class="section-eyebrow">Step 2</div>
-                <h2>Collaboration Areas</h2>
-                <p class="section-note">Open the relevant cards and describe your technology, expertise, investment or partnership model.</p>
+                <div class="section-eyebrow" data-i18n="step2">Step 2</div>
+                <h2 data-i18n="areas_title">Collaboration Areas</h2>
+                <p class="section-note" data-i18n="areas_note">Open the relevant cards and describe your technology, expertise, investment or partnership model.</p>
               </div>
             </div>
             <div class="area-list" id="areasList"></div>
@@ -577,9 +683,9 @@
           <section class="panel final-panel" id="final-section">
             <div class="section-head">
               <div>
-                <div class="section-eyebrow">Final Section</div>
-                <h2>Let&rsquo;s Build Together</h2>
-                <p class="section-note">
+                <div class="section-eyebrow" data-i18n="final_section">Final Section</div>
+                <h2 data-i18n="final_title">Let&rsquo;s Build Together</h2>
+                <p class="section-note" data-i18n="final_note">
                   Thank you for sharing your areas of interest. MOIL Limited looks forward to
                   exploring strategic partnerships, technology collaborations and opportunities for
                   mutual growth and innovation.
@@ -587,7 +693,7 @@
               </div>
             </div>
             <div class="actions">
-              <button type="button" class="btn btn-primary" id="preSubmitBtn">Submit</button>
+              <button type="button" class="btn btn-primary" id="preSubmitBtn" data-i18n="btn_submit">Submit</button>
             </div>
           </section>
 
@@ -595,12 +701,12 @@
             <div class="modal-content">
               <div class="modal-header">
                 <div>
-                  <div class="section-eyebrow">Review</div>
-                  <h2>Confirm Your Submission</h2>
+                  <div class="section-eyebrow" data-i18n="review">Review</div>
+                  <h2 data-i18n="confirm_title">Confirm Your Submission</h2>
                 </div>
               </div>
               <div class="modal-body">
-                <p class="section-note">
+                <p class="section-note" data-i18n="confirm_note">
                   Review the details below. You can edit any section before submitting.
                 </p>
                 <div class="review" id="review"></div>
@@ -609,8 +715,8 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="editFormBtn">Edit Details</button>
-                <button type="submit" class="btn btn-primary">Confirm & Submit Collaboration Interest</button>
+                <button type="button" class="btn btn-secondary" id="editFormBtn" data-i18n="btn_edit">Edit Details</button>
+                <button type="submit" class="btn btn-primary" data-i18n="btn_confirm">Confirm & Submit Collaboration Interest</button>
               </div>
             </div>
           </div>
@@ -619,232 +725,368 @@
     </main>
 
     <script>
-      const placeholder =
-        "Please describe your company's interest, available technology, proposed solution, experience, capacity, investment potential, or preferred collaboration model.";
+      let currentLang = 'en';
+
+      const translations = {
+        en: {
+          tag: "Official Collaboration Interest Form",
+          hero_title: "Areas for Collaboration & Technology Partnership",
+          hero_subtitle: "MOIL Limited invites Russian companies to explore potential areas of collaboration, technology partnership, joint ventures and knowledge sharing.",
+          hero_supporting: "Please indicate the areas where your company can offer technology, expertise, equipment, investment, joint venture opportunities or other forms of collaboration.",
+          step1: "Step 1",
+          company_info_title: "Company Information",
+          company_info_note: "Tell us who will represent the company in this collaboration discussion.",
+          label_email: "Company Email",
+          label_company: "Company Name",
+          label_rep: "Company Representative",
+          label_contact: "Contact Information",
+          step2: "Step 2",
+          areas_title: "Collaboration Areas",
+          areas_note: "Open the relevant cards and describe your technology, expertise, investment or partnership model.",
+          final_section: "Final Section",
+          final_title: "Let's Build Together",
+          final_note: "Thank you for sharing your areas of interest. MOIL Limited looks forward to exploring strategic partnerships, technology collaborations and opportunities for mutual growth and innovation.",
+          btn_submit: "Submit",
+          review: "Review",
+          confirm_title: "Confirm Your Submission",
+          confirm_note: "Review the details below. You can edit any section before submitting.",
+          btn_edit: "Edit Details",
+          btn_confirm: "Confirm & Submit Collaboration Interest",
+          placeholder: "Please describe your company's interest, available technology, proposed solution, experience, capacity, investment potential, or preferred collaboration model.",
+          completed: "completed",
+          req_field: "This field is required.",
+          invalid_email: "Enter a valid business email address.",
+          invalid_phone: "Enter a valid phone or contact number.",
+          no_selection: "No collaboration areas have been completed yet.",
+          sel_areas: "Selected Collaboration Areas",
+          toast_success: "Thank you. Your collaboration interest has been submitted to MOIL Limited.",
+          toast_error: "Submission could not be saved. Please contact MOIL Limited or try again.",
+          submitting: "Submitting...",
+          label_interest: "Your Interest / Collaboration Details",
+          area_prefix: "Area",
+          btn_edit_inline: "Edit",
+          brand_name: "MOIL LIMITED"
+        },
+        ru: {
+          tag: "Официальная форма заинтересованности в сотрудничестве",
+          hero_title: "Области сотрудничества и технологического партнерства",
+          hero_subtitle: "MOIL Limited приглашает российские компании изучить потенциальные области сотрудничества, технологического партнерства, создания совместных предприятий и обмена знаниями.",
+          hero_supporting: "Пожалуйста, укажите области, в которых ваша компания может предложить технологии, опыт, оборудование, инвестиции, возможности совместного предприятия или другие формы сотрудничества.",
+          step1: "Шаг 1",
+          company_info_title: "Информация о компании",
+          company_info_note: "Сообщите нам, кто будет представлять компанию в этом обсуждении сотрудничества.",
+          label_email: "Электронная почта компании",
+          label_company: "Название компании",
+          label_rep: "Представитель компании",
+          label_contact: "Контактная информация",
+          step2: "Шаг 2",
+          areas_title: "Области сотрудничества",
+          areas_note: "Откройте соответствующие карточки и опишите вашу технологию, опыт, инвестиции или модель партнерства.",
+          final_section: "Заключительный раздел",
+          final_title: "Давайте строить вместе",
+          final_note: "Благодарим вас за то, что поделились своими интересами. MOIL Limited надеется на изучение стратегического партнерства, технологического сотрудничества и возможностей для взаимного роста и инноваций.",
+          btn_submit: "Отправить",
+          review: "Проверка",
+          confirm_title: "Подтвердите вашу заявку",
+          confirm_note: "Проверьте детали ниже. Вы можете отредактировать любой раздел перед отправкой.",
+          btn_edit: "Изменить детали",
+          btn_confirm: "Подтвердить и отправить",
+          placeholder: "Пожалуйста, опишите интерес вашей компании, доступные технологии, предлагаемое решение, опыт, возможности, инвестиционный потенциал или предпочтительную модель сотрудничества.",
+          completed: "заполнено",
+          req_field: "Это поле обязательно для заполнения.",
+          invalid_email: "Введите действительный адрес электронной почты.",
+          invalid_phone: "Введите действительный номер телефона.",
+          no_selection: "Области сотрудничества еще не выбраны.",
+          sel_areas: "Выбранные области сотрудничества",
+          toast_success: "Спасибо. Ваша заявка на сотрудничество была отправлена в MOIL Limited.",
+          toast_error: "Не удалось сохранить заявку. Пожалуйста, свяжитесь с MOIL Limited или попробуйте еще раз.",
+          submitting: "Отправка...",
+          label_interest: "Ваш интерес / Детали сотрудничества",
+          area_prefix: "Область",
+          btn_edit_inline: "Изменить",
+          brand_name: "MOIL LIMITED"
+        }
+      };
 
       const areas = [
         {
-          title: "Collaboration / JV",
-          mode: "multiple",
+          title: { en: "Collaboration / JV", ru: "Сотрудничество / СП" },
           options: [
             {
-              title: "Manganese Asset Acquisition",
-              description:
-                "Joint acquisition of manganese deposits or producing mines, either in Russia or in a third country where both partners have access. India's domestic manganese resource is largely medium- and low-grade, and the country remains a net importer of high-grade ore, so overseas equity ore is the structural fix rather than a trading arrangement. A Russian partner brings exploration data, operating capability and, potentially, jurisdictions where Indian companies have limited standing on their own. The deal shapes range from farm-in on an exploration property to buying into a developed mine with known reserves.",
+              title: { en: "Manganese Asset Acquisition", ru: "Приобретение марганцевых активов" },
+              description: {
+                en: "Joint acquisition of manganese deposits or producing mines, either in Russia or in a third country where both partners have access. India's domestic manganese resource is largely medium- and low-grade, and the country remains a net importer of high-grade ore, so overseas equity ore is the structural fix rather than a trading arrangement. A Russian partner brings exploration data, operating capability and, potentially, jurisdictions where Indian companies have limited standing on their own. The deal shapes range from farm-in on an exploration property to buying into a developed mine with known reserves.",
+                ru: "Совместное приобретение месторождений марганца или действующих рудников как в России, так и в третьих странах, к которым имеют доступ оба партнера. Внутренние ресурсы марганца в Индии в основном представлены рудами среднего и низкого качества, и страна остается нетто-импортером высокосортной руды, поэтому зарубежное владение рудой является структурным решением, а не торговым соглашением. Российский партнер привносит данные геологоразведки, операционные возможности и, возможно, юрисдикции, где индийские компании имеют ограниченное влияние самостоятельно. Форматы сделок варьируются от участия в геологоразведке до покупки долей в действующих рудниках с известными запасами."
+              },
             },
             {
-              title: "Assets in Critical & Strategic Minerals",
-              description:
-                "The same acquisition model widened beyond manganese to the minerals on India's critical minerals list — vanadium, rare earths, graphite, cobalt, titanium, tungsten and similar. The logic is that MOIL's mining, geology and project-execution capability is transferable, and diversification reduces exposure to a single commodity cycle. Russia holds substantial resources across several of these categories and has state-linked entities accustomed to joint ownership structures.",
+              title: { en: "Assets in Critical & Strategic Minerals", ru: "Активы in Критических и Стратегических Минералах" },
+              description: {
+                en: "The same acquisition model widened beyond manganese to the minerals on India's critical minerals list — vanadium, rare earths, graphite, cobalt, titanium, tungsten and similar. The logic is that MOIL's mining, geology and project-execution capability is transferable, and diversification reduces exposure to a single commodity cycle. Russia holds substantial resources across several of these categories and has state-linked entities accustomed to joint ownership structures.",
+                ru: "Та же модель приобретения, расширенная за пределы марганца на минералы из индийского списка критически важных минералов — ванадий, редкоземельные элементы, графит, кобальт, титан, вольфрам и аналогичные. Логика заключается в том, что опыт MOIL в добыче, геологии и реализации проектов является передаваемым, а диверсификация снижает риски зависимости от цикла одного товара. Россия обладает значительными ресурсами во многих из этих категорий и имеет государственные структуры, привыкшие к форматам совместной собственности."
+              },
             },
             {
-              title: "Ferro Alloy Plant Take-Over",
-              description:
-                "Acquiring or taking a controlling stake in an existing ferro-manganese or silico-manganese smelter instead of building greenfield. The attraction is speed and certainty: an operating plant comes with commissioned furnaces, power tie-ups, trained crews, environmental clearances and an order book, all of which take years to assemble from scratch. It also gives MOIL a captive outlet for its own ore, converting an ore-sales margin into a smelting margin. Candidates could be underutilised Russian capacity or a distressed asset in a third market.",
+              title: { en: "Ferro Alloy Plant Take-Over", ru: "Поглощение завода ферросплавов" },
+              description: {
+                en: "Acquiring or taking a controlling stake in an existing ferro-manganese or silico-manganese smelter instead of building greenfield. The attraction is speed and certainty: an operating plant comes with commissioned furnaces, power tie-ups, trained crews, environmental clearances and an order book, all of which take years to assemble from scratch. It also gives MOIL a captive outlet for its own ore, converting an ore-sales margin into a smelting margin. Candidates could be underutilised Russian capacity or a distressed asset in a third market.",
+                ru: "Приобретение или получение контрольного пакета акций действующего завода по выплавке ферромарганца или силикомарганца вместо строительства нового объекта. Привлекательность заключается в скорости и определенности: действующий завод располагает введенными в эксплуатацию печами, налаженным энергоснабжением, обученным персоналом, экологическими разрешениями и портфелем заказов, на создание которых с нуля требуются годы. Это также дает MOIL гарантированный сбыт собственной руды, превращая маржу от продажи руды в маржу от выплавки. Кандидатами могут быть недогруженные российские мощности или проблемные активы на рынках третьих стран."
+              },
             },
             {
-              title: "Advanced R&D Centre",
-              description:
-                "A jointly funded and jointly staffed research facility, likely spanning manganese metallurgy, beneficiation flowsheets, ferroalloy process improvement and battery-grade material development. Russia's institutional research tradition in extractive metallurgy is deep and largely state-organised, which suits a CPSE-to-institution arrangement. The output would be pilot-scale process validation that de-risks MOIL's larger capital decisions before commitment.",
+              title: { en: "Advanced R&D Centre", ru: "Передовой научно-исследовательский центр" },
+              description: {
+                en: "A jointly funded and jointly staffed research facility, likely spanning manganese metallurgy, beneficiation flowsheets, ferroalloy process improvement and battery-grade material development. Russia's institutional research tradition in extractive metallurgy is deep and largely state-organised, which suits a CPSE-to-institution arrangement. The output would be pilot-scale process validation that de-risks MOIL's larger capital decisions before commitment.",
+                ru: "Совместно финансируемый и укомплектованный кадрами исследовательский центр, охватывающий металлургию марганца, схемы обогащения, улучшение процессов производства ферросплавов и разработку материалов аккумуляторного класса. Российские традиции институциональных исследований в области экстрактивной металлургии глубоки и в основном организованы государством, что подходит для соглашения между госкомпанией и институтом. Результатом будет валидация процессов на пилотном уровне, что снизит риски при принятии крупных инвестиционных решений MOIL."
+              },
             },
           ],
         },
         {
-          title: "Underground Mining Operations & Mechanization",
-          mode: "multiple",
+          title: { en: "Underground Mining Operations & Mechanization", ru: "Подземные горные работы и механизация" },
           options: [
             {
-              title: "Robotics",
-              description:
-                "Machines that perform drilling, explosive charging, mucking, scaling or inspection under remote control or autonomously. The safety case is immediate: these are the tasks that put workers under freshly blasted, unsupported ground. The productivity case follows, because remote equipment can work through blasting re-entry periods when people cannot enter.",
+              title: { en: "Robotics", ru: "Робототехника" },
+              description: {
+                en: "Machines that perform drilling, explosive charging, mucking, scaling or inspection under remote control or autonomously. The safety case is immediate: these are the tasks that put workers under freshly blasted, unsupported ground. The productivity case follows, because remote equipment can work through blasting re-entry periods when people cannot enter.",
+                ru: "Машины, выполняющие бурение, зарядку ВВ, погрузку, оборку кровли или осмотр под дистанционным или автономным управлением. Вопрос безопасности очевиден: это задачи, при которых рабочие находятся под свежевыработанным, незакрепленным грунтом. Далее следует вопрос производительности, так как дистанционное оборудование может работать в периоды проветривания после взрыва, когда людям вход запрещен."
+              },
             },
             {
-              title: "Cost-Effective Production",
-              description:
-                "Not a single technology but mining methods, cycle designs and equipment sizing that lower cost per tonne in narrow-vein geometry. Standard bulk-mining economics do not transfer directly to ore bodies a few metres wide, where dilution and development metres per tonne dominate the cost sheet. Russian experience in comparable vein-type deposits is the relevant transfer.",
+              title: { en: "Cost-Effective Production", ru: "Экономически эффективное производство" },
+              description: {
+                en: "Not a single technology but mining methods, cycle designs and equipment sizing that lower cost per tonne in narrow-vein geometry. Standard bulk-mining economics do not transfer directly to ore bodies a few metres wide, where dilution and development metres per tonne dominate the cost sheet. Russian experience in comparable vein-type deposits is the relevant transfer.",
+                ru: "Не отдельная технология, а методы добычи, схемы циклов и подбор размеров оборудования, снижающие стоимость тонны при отработке узкожильных месторождений. Стандартная экономика валовой добычи не переносится напрямую на рудные тела шириной в несколько метров, где на стоимость влияют разубоживание и объем проходки на тонну. Российский опыт разработки аналогичных жильных месторождений является актуальным для передачи."
+              },
             },
             {
-              title: "Heavy Mechanized Machinery",
-              description:
-                "LHDs, jumbo drills, low-profile dump trucks, raise borers and shaft-sinking equipment. The specification challenge is dimensional: machines sized for large Western operations often will not fit MOIL's drives and stopes, so what matters is compact, low-profile equipment with adequate power and serviceability in Indian conditions.",
+              title: { en: "Heavy Mechanized Machinery", ru: "Тяжелая механизированная техника" },
+              description: {
+                en: "LHDs, jumbo drills, low-profile dump trucks, raise borers and shaft-sinking equipment. The specification challenge is dimensional: machines sized for large Western operations often will not fit MOIL's drives and stopes, so what matters is compact, low-profile equipment with adequate power and serviceability in Indian conditions.",
+                ru: "ПДМ, буровые установки Jumbo, низкопрофильные самосвалы, проходческие комбайны и оборудование для проходки стволов. Сложность спецификации заключается в габаритах: машины, рассчитанные на крупные западные предприятия, часто не вписываются в выработки и очистные пространства MOIL, поэтому важна компактная, низкопрофильная техника с достаточной мощностью и пригодностью для обслуживания в индийских условиях."
+              },
             },
             {
-              title: "Process Automation (SCADA/IoT integration)",
-              description:
-                "Bringing ventilation fans, dewatering pumps, hoisting, crushing and conveying under centralised monitoring and control. Today these systems are typically operated locally and independently; integrated control lets the mine run them on demand rather than continuously, which cuts energy cost substantially — ventilation and pumping are among the largest fixed power loads in an underground mine.",
+              title: { en: "Process Automation (SCADA/IoT integration)", ru: "Автоматизация процессов (интеграция SCADA/IoT)" },
+              description: {
+                en: "Bringing ventilation fans, dewatering pumps, hoisting, crushing and conveying under centralised monitoring and control. Today these systems are typically operated locally and independently; integrated control lets the mine run them on demand rather than continuously, which cuts energy cost substantially — ventilation and pumping are among the largest fixed power loads in an underground mine.",
+                ru: "Перевод вентиляторов, водоотливных насосов, подъема, дробления и транспортировки под централизованный мониторинг и управление. Сегодня эти системы обычно управляются локально и независимо; интегрированное управление позволяет запускать их по требованию, а не постоянно, что существенно снижает затраты на электроэнергию — вентиляция и водоотлив входят в число крупнейших постоянных нагрузок рудника."
+              },
             },
             {
-              title: "Strata Monitoring & Seismic Prediction",
-              description:
-                "Instrumentation networks — microseismic arrays, extensometers, convergence monitors, stress cells — that detect ground movement and give warning of roof fall or rockburst. As mines deepen, stress-driven failure becomes a genuine hazard rather than a theoretical one, and Russian deep-mine practice has long-standing expertise in seismic hazard management.",
+              title: { en: "Strata Monitoring & Seismic Prediction", ru: "Мониторинг горного давления и сейсмическое прогнозирование" },
+              description: {
+                en: "Instrumentation networks — microseismic arrays, extensometers, convergence monitors, stress cells — that detect ground movement and give warning of roof fall or rockburst. As mines deepen, stress-driven failure becomes a genuine hazard rather than a theoretical one, and Russian deep-mine practice has long-standing expertise in seismic hazard management.",
+                ru: "Сети приборов — микросейсмические системы, экстензометры, датчики сближения, тензодатчики — которые обнаруживают движение массива и предупреждают об обрушении кровли или горном ударе. По мере углубления рудников разрушения, вызванные напряжением, становятся реальной, а не теоретической угрозой, и российская практика глубоких рудников имеет многолетний опыт управления сейсмическими рисками."
+              },
             },
             {
-              title: "EV & Battery-Operated Trucks",
-              description:
-                "Battery-electric haulage and utility vehicles underground. Removing diesel removes particulate exhaust and a large heat load, which in turn reduces the ventilation air quantity the mine must supply — often the single biggest cost saving, larger than the fuel saving itself. The engineering questions are battery life in high ambient temperature, charging or swap infrastructure, and fire safety protocols.",
+              title: { en: "EV & Battery-Operated Trucks", ru: "Электромобили и самосвалы на аккумуляторах" },
+              description: {
+                en: "Battery-electric haulage and utility vehicles underground. Removing diesel removes particulate exhaust and a large heat load, which in turn reduces the ventilation air quantity the mine must supply — often the single biggest cost saving, larger than the fuel saving itself. The engineering questions are battery life in high ambient temperature, charging or swap infrastructure, and fire safety protocols.",
+                ru: "Аккумуляторная техника для транспортировки и вспомогательных работ под землей. Отказ от дизеля устраняет выхлопные газы и значительную тепловую нагрузку, что, в свою очередь, снижает объем воздуха, который должен подаваться в шахту — часто это самая большая статья экономии, превышающая экономию на топливе. Инженерные вопросы включают срок службы батарей при высокой температуре, инфраструктуру зарядки или замены и протоколы пожарной безопасности."
+              },
             },
           ],
         },
         {
-          title: "Low-Grade Mineral Beneficiation",
-          mode: "multiple",
+          title: { en: "Low-Grade Mineral Beneficiation", ru: "Обогащение низкосортных руд" },
           options: [
             {
-              title: "Advanced Gravity Separation",
-              description:
-                "Jigs, spirals, dense-medium cyclones and enhanced-gravity concentrators that exploit the density difference between manganese minerals and siliceous gangue. Gravity methods are cheap to run and chemically simple, so they are the first line of attack; the limitation is that they lose efficiency below roughly 100 microns, which is exactly where Indian manganese ore tends to generate its fines.",
+              title: { en: "Advanced Gravity Separation", ru: "Усовершенствованная гравитационная сепарация" },
+              description: {
+                en: "Jigs, spirals, dense-medium cyclones and enhanced-gravity concentrators that exploit the density difference between manganese minerals and siliceous gangue. Gravity methods are cheap to run and chemically simple, so they are the first line of attack; the limitation is that they lose efficiency below roughly 100 microns, which is exactly where Indian manganese ore tends to generate its fines.",
+                ru: "Отсадочные машины, спирали, циклоны в тяжелых средах и концентраторы с усиленной гравитацией, использующие разницу в плотности между марганцевыми минералами и кремнистой пустой породой. Гравитационные методы дешевы в эксплуатации и химически просты, поэтому они являются первым этапом; ограничение состоит в том, что они теряют эффективность при размере частиц менее 100 микрон, что как раз является проблемой для мелочи индийской марганцевой руды."
+              },
             },
             {
-              title: "High-Intensity Magnetic Separation",
-              description:
-                "Wet and dry high-intensity separators (WHIMS, dry HIMS, rare-earth roll) that recover weakly paramagnetic manganese minerals which gravity circuits miss. This is the natural companion to gravity separation on fine fractions and is central to any dump-reprocessing flowsheet.",
+              title: { en: "High-Intensity Magnetic Separation", ru: "Высокоинтенсивная магнитная сепарация" },
+              description: {
+                en: "Wet and dry high-intensity separators (WHIMS, dry HIMS, rare-earth roll) that recover weakly paramagnetic manganese minerals which gravity circuits miss. This is the natural companion to gravity separation on fine fractions and is central to any dump-reprocessing flowsheet.",
+                ru: "Мокрые и сухие сепараторы высокой интенсивности (WHIMS, сухие HIMS, редкоземельные роликовые), которые извлекают слабопарамагнитные марганцевые минералы, пропускаемые гравитационными схемами. Это естественное дополнение к гравитации для мелких фракций и центральный элемент любой схемы переработки отвалов."
+              },
             },
             {
-              title: "Low-Grade to High-Purity Concentrate Technology",
-              description:
-                "Complete flowsheets that take sub-30% Mn material to a high-purity concentrate, typically requiring hydrometallurgy — reductive leaching, solution purification, precipitation — rather than physical separation alone. This is the bridge between a mining product and a chemical product, and it is the step that unlocks EMM, EMD and battery-grade feedstock downstream. It also brings reagent cost, effluent management and capital intensity that physical beneficiation does not.",
+              title: { en: "Low-Grade to High-Purity Concentrate Technology", ru: "Технология получения высокочистого концентрата из низкосортного сырья" },
+              description: {
+                en: "Complete flowsheets that take sub-30% Mn material to a high-purity concentrate, typically requiring hydrometallurgy — reductive leaching, solution purification, precipitation — rather than physical separation alone. This is the bridge between a mining product and a chemical product, and it is the step that unlocks EMM, EMD and battery-grade feedstock downstream. It also brings reagent cost, effluent management and capital intensity that physical beneficiation does not.",
+                ru: "Полные технологические схемы, позволяющие получать высокочистый концентрат из материала с содержанием Mn менее 30%, что обычно требует гидрометаллургии — восстановительного выщелачивания, очистки раствора, осаждения — а не только физического разделения. Это мост между добычным продуктом и химическим продуктом, и именно этот шаг открывает доступ к производству ЭММ, ЭМД и сырья для аккумуляторов. Это также влечет за собой затраты на реагенты, управление стоками и капиталоемкость, которых нет при физическом обогащении."
+              },
             },
             {
-              title: "Field Sample Testing Equipment",
-              description:
-                "Portable XRF, LIBS and similar analysers giving grade readings at the face, on the stockpile and at the loading point within minutes instead of a laboratory turnaround. Real-time grade knowledge is what makes selective mining and ore blending possible; without it, grade control is retrospective.",
+              title: { en: "Field Sample Testing Equipment", ru: "Оборудование для полевого экспресс-анализа проб" },
+              description: {
+                en: "Portable XRF, LIBS and similar analysers giving grade readings at the face, on the stockpile and at the loading point within minutes instead of a laboratory turnaround. Real-time grade knowledge is what makes selective mining and ore blending possible; without it, grade control is retrospective.",
+                ru: "Портативные XRF, LIBS и аналогичные анализаторы, выдающие данные о содержании в забое, на складе и в пункте погрузки за считанные минуты вместо ожидания результатов из лаборатории. Знание содержания в реальном времени — это то, что делает возможным селективную добычу и усреднение руды; без этого контроль качества является ретроспективным."
+              },
             },
             {
-              title: "Any Other Mineral Beneficiation Techniques Related to Manganese",
-              description:
-                "A deliberate open slot inviting proposals outside the named categories — flotation, sensor-based ore sorting, bio-leaching, reduction roasting, or combinations. Keeping it open avoids ruling out a route MOIL has not yet evaluated.",
+              title: { en: "Any Other Mineral Beneficiation Techniques Related to Manganese", ru: "Любые другие методы обогащения минералов, связанные с марганцем" },
+              description: {
+                en: "A deliberate open slot inviting proposals outside the named categories — flotation, sensor-based ore sorting, bio-leaching, reduction roasting, or combinations. Keeping it open avoids ruling out a route MOIL has not yet evaluated.",
+                ru: "Специально оставленный слот для предложений вне названных категорий — флотация, сенсорная сортировка руды, биовыщелачивание, восстановительный обжиг или комбинации. Оставив этот пункт открытым, мы не исключаем способы, которые MOIL еще не рассматривал."
+              },
             },
           ],
         },
         {
-          title: "Value-Addition Techniques & Downstream Processing",
-          mode: "multiple",
+          title: { en: "Value-Addition Techniques & Downstream Processing", ru: "Методы создания добавленной стоимости и глубокая переработка" },
           options: [
             {
-              title: "EMM Technology",
-              description:
-                "Electrolytic manganese metal, produced by leaching ore in sulphuric acid, purifying the solution, and electrowinning metal onto cathodes. EMM feeds specialty steels and aluminium alloys and commands a large multiple over ore prices. It is also power-hungry and effluent-heavy, so viability turns almost entirely on tariff and on solution purification chemistry — which is where a technology partner earns their place.",
+              title: { en: "EMM Technology", ru: "Технология ЭММ" },
+              description: {
+                en: "Electrolytic manganese metal, produced by leaching ore in sulphuric acid, purifying the solution, and electrowinning metal onto cathodes. EMM feeds specialty steels and aluminium alloys and commands a large multiple over ore prices. It is also power-hungry and effluent-heavy, so viability turns almost entirely on tariff and on solution purification chemistry — which is where a technology partner earns their place.",
+                ru: "Электролитический металлический марганец, получаемый путем выщелачивания руды в серной кислоте, очистки раствора и электролиза металла на катодах. ЭММ используется в специальных сталях и алюминиевых сплавах и стоит в разы дороже руды. Это энергоемкое и экологически сложное производство, поэтому жизнеспособность зависит почти полностью от тарифов и химии очистки раствора — именно здесь проявляется ценность технологического партнера."
+              },
             },
             {
-              title: "EMD Lab (High-Purity Flakes, Lead Control)",
-              description:
-                "Electrolytic manganese dioxide for dry-cell and lithium battery cathodes. Battery-grade EMD is defined by what is absent rather than what is present: lead, iron, nickel and alkali impurities at parts-per-million levels determine whether a cell manufacturer will qualify the material at all. Starting at laboratory scale is the correct sequence, because impurity control must be proven before capital is committed to a plant.",
+              title: { en: "EMD Lab (High-Purity Flakes, Lead Control)", ru: "Лаборатория ЭМД (хлопья высокой чистоты, контроль содержания свинца)" },
+              description: {
+                en: "Electrolytic manganese dioxide for dry-cell and lithium battery cathodes. Battery-grade EMD is defined by what is absent rather than what is present: lead, iron, nickel and alkali impurities at parts-per-million levels determine whether a cell manufacturer will qualify the material at all. Starting at laboratory scale is the correct sequence, because impurity control must be proven before capital is committed to a plant.",
+                ru: "Электролитический диоксид марганца для катодов сухих элементов и литиевых батарей. ЭМД аккумуляторного класса определяется скорее отсутствием примесей, чем присутствием компонентов: свинец, железо, никель и щелочные примеси на уровне частей на миллион определяют, допустит ли производитель элементов данный материал. Начинать с лабораторного масштаба — правильная последовательность, так как контроль примесей должен быть доказан до инвестирования капитала в завод."
+              },
             },
             {
-              title: "Setting up / Modification of Advanced Ferroalloy & Silico-Manganese Plant",
-              description:
-                "Submerged arc furnace design, retrofit and capacity expansion for high-carbon ferro-manganese, medium- and low-carbon grades, and silico-manganese. Includes furnace sizing, electrode systems, raw-material preparation and slag chemistry. Modification of existing units often gives a better return than new build, since debottlenecking captures capacity at a fraction of greenfield cost.",
+              title: { en: "Setting up / Modification of Advanced Ferroalloy & Silico-Manganese Plant", ru: "Создание / модернизация современного завода ферросплавов и силикомарганца" },
+              description: {
+                en: "Submerged arc furnace design, retrofit and capacity expansion for high-carbon ferro-manganese, medium- and low-carbon grades, and silico-manganese. Includes furnace sizing, electrode systems, raw-material preparation and slag chemistry. Modification of existing units often gives a better return than new build, since debottlenecking captures capacity at a fraction of greenfield cost.",
+                ru: "Проектирование, модернизация и расширение мощностей руднотермических печей для производства высокоуглеродистого ферромарганца, средне- и низкоуглеродистых марок, а также силикомарганца. Включает расчет параметров печей, электродные системы, подготовку сырья и химию шлаков. Модернизация существующих агрегатов часто дает лучшую окупаемость, чем новое строительство, так как устранение «узких мест» позволяет нарастить мощность за долю стоимости нового проекта."
+              },
             },
             {
-              title: "Energy Efficiency in Fe-Mn & Si-Mn Plants",
-              description:
-                "Power is the dominant cost head in smelting, so this is where margin is actually made or lost. The levers are waste-heat recovery, capture and use of carbon monoxide-rich off-gas as fuel, electrode consumption control, burden preheating and improved furnace power factor. Incremental gains here compound across every tonne produced.",
+              title: { en: "Energy Efficiency in Fe-Mn & Si-Mn Plants", ru: "Энергоэффективность заводов Fe-Mn и Si-Mn" },
+              description: {
+                en: "Power is the dominant cost head in smelting, so this is where margin is actually made or lost. The levers are waste-heat recovery, capture and use of carbon monoxide-rich off-gas as fuel, electrode consumption control, burden preheating and improved furnace power factor. Incremental gains here compound across every tonne produced.",
+                ru: "Электроэнергия — основная статья расходов при выплавке, поэтому именно здесь формируется или теряется маржа. Рычаги воздействия: утилизация тепла, улавливание и использование богатого окисью углерода отходящего газа в качестве топлива, контроль расхода электродов, предварительный подогрев шихты и улучшение коэффициента мощности печей. Поэтапные улучшения здесь суммируются на каждой произведенной тонне."
+              },
             },
             {
-              title: "Carbon-Efficient Ferroalloy JV",
-              description:
-                "Low-carbon smelting routes: biochar and other bio-reductants replacing coke, hydrogen-assisted reduction, and carbon capture on furnace off-gas. Beyond emissions accounting, this is market access — the EU Carbon Border Adjustment Mechanism and the decarbonisation commitments of European steelmakers will progressively price carbon into imported alloys, so a low-carbon product line is a commercial hedge as much as an environmental one.",
+              title: { en: "Carbon-Efficient Ferroalloy JV", ru: "СП по производству низкоуглеродистых ферросплавов" },
+              description: {
+                en: "Low-carbon smelting routes: biochar and other bio-reductants replacing coke, hydrogen-assisted reduction, and carbon capture on furnace off-gas. Beyond emissions accounting, this is market access — the EU Carbon Border Adjustment Mechanism and the decarbonisation commitments of European steelmakers will progressively price carbon into imported alloys, so a low-carbon product line is a commercial hedge as much as an environmental one.",
+                ru: "Низкоуглеродистые способы выплавки: биоуголь и другие биовосстановители вместо кокса, восстановление с помощью водорода и улавливание углерода из отходящих газов печей. Помимо учета выбросов, это доступ к рынку — механизм пограничного углеродного регулирования ЕС (CBAM) и обязательства европейских сталелитейщиков по декарбонизации будут постепенно повышать цену углерода в импортных сплавах, поэтому линейка низкоуглеродистой продукции является коммерческой страховкой."
+              },
             },
           ],
         },
         {
-          title: "Predictive Maintenance & Digital Twin Infrastructure",
-          mode: "multiple",
+          title: { en: "Predictive Maintenance & Digital Twin Infrastructure", ru: "Предиктивное обслуживание и инфраструктура цифровых двойников" },
           options: [
             {
-              title: "AI-Driven Predictive Diagnostics",
-              description:
-                "Continuous vibration, thermal, acoustic and motor-current monitoring on critical rotating equipment — hoists, fans, pumps, crushers — with models that flag developing faults before failure. The value is in converting unplanned stoppages into scheduled interventions, which matters most on single-point-of-failure equipment like a winder, where an outage stops the entire mine rather than one section.",
+              title: { en: "AI-Driven Predictive Diagnostics", ru: "Предиктивная диагностика на основе ИИ" },
+              description: {
+                en: "Continuous vibration, thermal, acoustic and motor-current monitoring on critical rotating equipment — hoists, fans, pumps, crushers — with models that flag developing faults before failure. The value is in converting unplanned stoppages into scheduled interventions, which matters most on single-point-of-failure equipment like a winder, where an outage stops the entire mine rather than one section.",
+                ru: "Непрерывный вибрационный, тепловой, акустический и токовый мониторинг критически важного вращающегося оборудования — подъемных машин, вентиляторов, насосов, дробилок — с моделями, которые сигнализируют о развивающихся неисправностях до поломки. Ценность заключается в замене незапланированных остановок плановыми вмешательствами, что наиболее важно для оборудования, являющегося «точкой отказа», например, шахтных подъемников, где поломка останавливает весь рудник, а не одну секцию."
+              },
             },
             {
-              title: "Integrated Mine Digital Twins",
-              description:
-                "A live virtual replica of the mine and processing plant, fed by survey, geological, production and sensor data. It supports scenario testing — sequencing changes, ventilation redesign, equipment fleet sizing — without disturbing operations, and it makes planning decisions traceable and reviewable. Building one requires the underlying data discipline first, which is why it sits alongside automation and sensing rather than ahead of them.",
+              title: { en: "Integrated Mine Digital Twins", ru: "Интегрированные цифровые двойники рудников" },
+              description: {
+                en: "A live virtual replica of the mine and processing plant, fed by survey, geological, production and sensor data. It supports scenario testing — sequencing changes, ventilation redesign, equipment fleet sizing — without disturbing operations, and it makes planning decisions traceable and reviewable. Building one requires the underlying data discipline first, which is why it sits alongside automation and sensing rather than ahead of them.",
+                ru: "Живая виртуальная копия рудника и обогатительной фабрики, наполняемая данными маркшейдерских съемок, геологии, производства и датчиков. Это позволяет тестировать сценарии — изменения последовательности работ, перепроектирование вентиляции, подбор парка оборудования — не мешая работе, и делает проектные решения отслеживаемыми и проверяемыми. Создание двойника требует предварительной дисциплины данных, поэтому он стоит рядом с автоматизацией и сенсорикой."
+              },
             },
           ],
         },
         {
-          title: "Advanced Geophysical Exploration & Deep-Seated Ore Body Imaging",
-          mode: "multiple",
+          title: { en: "Advanced Geophysical Exploration & Deep-Seated Ore Body Imaging", ru: "Передовая геофизическая разведка и визуализация глубоко залегающих рудных тел" },
           options: [
             {
-              title: "Tomographic & Seismic Imaging",
-              description:
-                "Sub-surface imaging techniques that map ore continuity and structural disruption below existing workings, reducing reliance on drilling alone. Russia has a strong applied geophysics tradition, and deep-imaging capability is precisely what narrow, structurally complex ore bodies demand.",
+              title: { en: "Tomographic & Seismic Imaging", ru: "Томографическая и сейсмическая визуализация" },
+              description: {
+                en: "Sub-surface imaging techniques that map ore continuity and structural disruption below existing workings, reducing reliance on drilling alone. Russia has a strong applied geophysics tradition, and deep-imaging capability is precisely what narrow, structurally complex ore bodies demand.",
+                ru: "Методы подповерхностной визуализации, которые картируют непрерывность руды и структурные нарушения ниже существующих выработок, снижая зависимость только от бурения. Россия имеет сильные традиции прикладной геофизики, а возможности глубокой визуализации — это именно то, что требуется для узких, структурно сложных рудных тел."
+              },
             },
             {
-              title: "Smart Core Drilling Tech",
-              description:
-                "Directional and navigational drilling, downhole geophysical logging, and automated core scanning and logging. Together these get more geological information per metre drilled and reduce the number of holes needed to define a block, which directly cuts exploration cost per tonne proved.",
+              title: { en: "Smart Core Drilling Tech", ru: "Технологии интеллектуального колонкового бурения" },
+              description: {
+                en: "Directional and navigational drilling, downhole geophysical logging, and automated core scanning and logging. Together these get more geological information per metre drilled and reduce the number of holes needed to define a block, which directly cuts exploration cost per tonne proved.",
+                ru: "Направленное и навигационное бурение, скважинный геофизический каротаж, а также автоматическое сканирование и документирование керна. Вместе это позволяет получать больше геологической информации на метр бурения и сокращает количество скважин, необходимых для оконтуривания блока, что напрямую снижает затраты на разведку на тонну подтвержденных запасов."
+              },
             },
             {
-              title: "Geo-Mapping & Drone Technology",
-              description:
-                "UAV-mounted photogrammetry, LiDAR, magnetics and multispectral sensing for surface geological mapping, dump and stockpile volume measurement, lease-boundary verification and slope monitoring. Fast, repeatable and cheap compared with conventional survey, and useful for statutory reporting as well as exploration.",
+              title: { en: "Geo-Mapping & Drone Technology", ru: "Геокартирование и использование дронов" },
+              description: {
+                en: "UAV-mounted photogrammetry, LiDAR, magnetics and multispectral sensing for surface geological mapping, dump and stockpile volume measurement, lease-boundary verification and slope monitoring. Fast, repeatable and cheap compared with conventional survey, and useful for statutory reporting as well as exploration.",
+                ru: "Фотограмметрия, LiDAR, магнитная и мультиспектральная съемка с БПЛА для поверхностного геологического картирования, измерения объемов отвалов и складов, верификации границ лицензионных участков и мониторинга откосов. Быстро, повторяемо и дешево по сравнению с традиционной съемкой, полезно как для обязательной отчетности, так и для разведки."
+              },
             },
           ],
         },
         {
-          title: "Eco-Friendly Tailings & Green Mining Solutions",
-          mode: "multiple",
+          title: { en: "Eco-Friendly Tailings & Green Mining Solutions", ru: "Экологически чистые хвосты и решения для «зеленой» добычи" },
           options: [
             {
-              title: "Dry Stacking & Paste Backfill Technology",
-              description:
-                "Filtering tailings to a stackable solid rather than impounding them wet, and mixing tailings with binder to place as paste fill in mined-out voids underground. Dry stacking eliminates tailings dam failure risk entirely and recovers most of the process water. Paste backfill goes further by returning waste to the mine, which improves ground stability, permits higher ore recovery from pillars, and reduces surface footprint — a real advantage when land acquisition and forest land are the binding constraints.",
+              title: { en: "Dry Stacking & Paste Backfill Technology", ru: "Технология сухого складирования и пастовой закладки" },
+              description: {
+                en: "Filtering tailings to a stackable solid rather than impounding them wet, and mixing tailings with binder to place as paste fill in mined-out voids underground. Dry stacking eliminates tailings dam failure risk entirely and recovers most of the process water. Paste backfill goes further by returning waste to the mine, which improves ground stability, permits higher ore recovery from pillars, and reduces surface footprint — a real advantage when land acquisition and forest land are the binding constraints.",
+                ru: "Фильтрация хвостов до состояния штабелируемого твердого вещества вместо их мокрого складирования, и смешивание хвостов со связующим для использования в качестве пастовой закладки в выработанном пространстве под землей. Сухое складирование полностью устраняет риск прорыва дамб хвостохранилищ и возвращает большую часть технологической воды. Пастовая закладки идет дальше, возвращая отходы в шахту, что повышает устойчивость массива, позволяет извлекать больше руды из целиков и сокращает площадь на поверхности — реальное преимущество при сложностях с отводом земель и лесных угодий."
+              },
             },
             {
-              title: "Eco-Metallurgy Solutions",
-              description:
-                "Cleaner processing generally: lower reagent consumption, closed-loop water circuits, effluent treatment and neutralisation, and recovery of value from waste streams. Relevant to any hydrometallurgical route MOIL adopts, where effluent volume is the main environmental and permitting exposure.",
+              title: { en: "Eco-Metallurgy Solutions", ru: "Эко-металлургические решения" },
+              description: {
+                en: "Cleaner processing generally: lower reagent consumption, closed-loop water circuits, effluent treatment and neutralisation, and recovery of value from waste streams. Relevant to any hydrometallurgical route MOIL adopts, where effluent volume is the main environmental and permitting exposure.",
+                ru: "В целом более чистая переработка: снижение расхода реагентов, замкнутые циклы водооборота, очистка и нейтрализация стоков, а также извлечение полезных компонентов из потоков отходов. Актуально для любого гидрометаллургического маршрута, который примет MOIL, где объем стоков является основным экологическим риском."
+              },
             },
           ],
         },
         {
-          title: "Autonomous Logistics & Smart Supply Chain Integration",
-          mode: "multiple",
+          title: { en: "Autonomous Logistics & Smart Supply Chain Integration", ru: "Автономная логистика и интеллектуальная интеграция цепочки поставок" },
           options: [
             {
-              title: "Underground Rail & Conveyor Automation",
-              description:
-                "Driverless locomotives, automated loading and discharge points, and instrumented conveyor systems with condition monitoring and automatic sequencing. Ore movement is continuous, repetitive and confined — the ideal profile for automation — and consistent haulage throughput removes a common bottleneck between the face and the shaft.",
+              title: { en: "Underground Rail & Conveyor Automation", ru: "Автоматизация подземного рельсового и конвейерного транспорта" },
+              description: {
+                en: "Driverless locomotives, automated loading and discharge points, and instrumented conveyor systems with condition monitoring and automatic sequencing. Ore movement is continuous, repetitive and confined — the ideal profile for automation — and consistent haulage throughput removes a common bottleneck between the face and the shaft.",
+                ru: "Беспилотные локомотивы, автоматизированные пункты погрузки и разгрузки, оснащенные приборами конвейерные системы с мониторингом состояния и автоматическим включением. Перемещение руды — процесс непрерывный, повторяющийся и замкнутый — идеальный профиль для автоматизации, а стабильная пропускная способность транспорта устраняет узкое место между забоем и стволом."
+              },
             },
             {
-              title: "Smart Spare Parts Management",
-              description:
-                "Inventory driven by usage forecasting and equipment condition data rather than fixed reorder levels, with vendor integration and potentially additive manufacturing for low-volume critical spares. For a mine whose imported equipment has long lead times, this is the difference between a two-day and a two-month outage, and it releases working capital tied up in slow-moving stock.",
+              title: { en: "Smart Spare Parts Management", ru: "Интеллектуальное управление запасными частями" },
+              description: {
+                en: "Inventory driven by usage forecasting and equipment condition data rather than fixed reorder levels, with vendor integration and potentially additive manufacturing for low-volume critical spares. For a mine whose imported equipment has long lead times, this is the difference between a two-day and a two-month outage, and it releases working capital tied up in slow-moving stock.",
+                ru: "Управление запасами на основе прогнозирования использования и данных о состоянии оборудования, а не фиксированных уровней перезаказа, с интеграцией поставщиков и, возможно, аддитивным производством критически важных запчастей малого объема. Для рудника с импортным оборудованием и длительными сроками поставки это разница между двухдневным и двухмесячным простоем."
+              },
             },
           ],
         },
         {
-          title: "Underground Communications & Digital Infrastructure",
-          mode: "multiple",
+          title: { en: "Underground Communications & Digital Infrastructure", ru: "Подземная связь и цифровая инфраструктура" },
           options: [
             {
-              title: "Specialized Underground Communication",
-              description:
-                "Intrinsically safe voice and data networks capable of carrying signal through rock and around workings, engineered for dust, humidity, blast damage and the constantly changing geometry of an advancing mine.",
+              title: { en: "Specialized Underground Communication", ru: "Специализированная подземная связь" },
+              description: {
+                en: "Intrinsically safe voice and data networks capable of carrying signal through rock and around workings, engineered for dust, humidity, blast damage and the constantly changing geometry of an advancing mine.",
+                ru: "Искробезопасные сети передачи голоса и данных, способные передавать сигнал сквозь породу и вокруг выработок, спроектированные с учетом пыли, влажности, взрывных работ и постоянно меняющейся геометрии продвигающегося рудника."
+              },
             },
             {
-              title: "Leaky Feeder & Ultra-Wide Band Tracking",
-              description:
-                "Leaky feeder cable for continuous radio coverage along drives, with UWB tags giving metre-level location of personnel and equipment. Beyond day-to-day dispatch efficiency, this is a mine-rescue capability: knowing exactly who is where after an incident, and it supports statutory safety compliance and shift accounting.",
+              title: { en: "Leaky Feeder & Ultra-Wide Band Tracking", ru: "Излучающий кабель и отслеживание в сверхширокой полосе (UWB)" },
+              description: {
+                en: "Leaky feeder cable for continuous radio coverage along drives, with UWB tags giving metre-level location of personnel and equipment. Beyond day-to-day dispatch efficiency, this is a mine-rescue capability: knowing exactly who is where after an incident, and it supports statutory safety compliance and shift accounting.",
+                ru: "Излучающий кабель для непрерывного радиопокрытия вдоль выработок с UWB-метками, обеспечивающими позиционирование персонала и оборудования с точностью до метра. Помимо эффективности диспетчеризации, это инструмент горноспасательных работ: точное знание местонахождения каждого человека после инцидента, а также поддержка соблюдения норм безопасности."
+              },
             },
             {
-              title: "Emergency Refuge Chambers & Lifeline Systems",
-              description:
-                "Sealed chambers with independent breathable air, water, food, communications and thermal management, plus the compressed-air and comms lifelines that reach them. Standard practice in deep mining internationally and increasingly expected by regulators; they are the last line of protection in a fire, inundation or entrapment event.",
+              title: { en: "Emergency Refuge Chambers & Lifeline Systems", ru: "Аварийные камеры-убежища и системы жизнеобеспечения" },
+              description: {
+                en: "Sealed chambers with independent breathable air, water, food, communications and thermal management, plus the compressed-air and comms lifelines that reach them. Standard practice in deep mining internationally and increasingly expected by regulators; they are the last line of protection in a fire, inundation or entrapment event.",
+                ru: "Герметичные камеры с автономным запасом воздуха, воды, пищи, средствами связи и терморегуляции, а также линии сжатого воздуха и связи, подведенные к ним. Стандартная практика в глубоких рудниках на международном уровне, которую все чаще требуют регуляторы; это последняя линия защиты при пожаре, затоплении или завале."
+              },
             },
           ],
         },
         {
-          title: "Renewable Energy & Storage Collaboration",
-          mode: "multiple",
+          title: { en: "Renewable Energy & Storage Collaboration", ru: "Сотрудничество в области возобновляемых источников энергии и хранения" },
           options: [
             {
-              title: "Manganese-Based Battery Chemistry",
-              description:
-                "Explore collaboration on manganese-rich battery cathode materials, an emerging application for high-purity manganese aligned with EMM ambitions. These chemistries are attractive to cell makers because manganese is abundant and cheap compared with cobalt and nickel, and they are the reason battery-grade manganese demand is projected to grow far faster than steel-driven demand. For MOIL, this is the demand-side justification for the EMM and EMD investments in section 4 — it defines who the eventual customer is, and it connects a mining company to the energy transition rather than only to the steel cycle.",
+              title: { en: "Manganese-Based Battery Chemistry", ru: "Химия аккумуляторов на основе марганца" },
+              description: {
+                en: "Manganese-rich cathode chemistries: lithium manganese iron phosphate (LMFP), lithium- and manganese-rich layered oxides (LMR), and sodium-ion cathodes that use manganese. These chemistries are attractive to cell makers because manganese is abundant and cheap compared with cobalt and nickel, and they are the reason battery-grade manganese demand is projected to grow far faster than steel-driven demand. For MOIL, this is the demand-side justification for the EMM and EMD investments in section 4 — it defines who the eventual customer is, and it connects a mining company to the energy transition rather than only to the steel cycle.",
+                ru: "Катодные составы с высоким содержанием марганца: литий-марганец-железо-фосфат (LMFP), слоистые оксиды, богатые литием и марганцем (LMR), и натрий-ионные катоды с марганцем. Эти составы привлекательны для производителей элементов, так как марганец доступен и дешев по сравнению с кобальтом и никелем, и именно поэтому прогнозируется, что спрос на марганец аккумуляторного класса будет расти гораздо быстрее, чем спрос со стороны сталелитейной отрасли. Для MOIL это обоснование инвестиций в ЭММ и ЭМД из раздела 4 — это определяет конечного потребителя и связывает горнодобывающую компанию с энергетическим переходом, а не только со сталелитейным циклом."
+              },
             },
           ],
         },
@@ -859,26 +1101,52 @@
       const preSubmitBtn = document.querySelector("#preSubmitBtn");
       const editFormBtn = document.querySelector("#editFormBtn");
 
+      function setLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+        });
+        updateUI();
+        renderAreas();
+        updateProgress();
+        if (reviewModal.classList.contains('visible')) generateReview();
+      }
+
+      function updateUI() {
+        const t = translations[currentLang];
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (t[key]) el.textContent = t[key];
+        });
+        document.querySelectorAll("textarea").forEach(ta => {
+          ta.placeholder = t.placeholder;
+        });
+      }
+
       function slug(text) {
         return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
       }
 
-      function createTextarea(id, areaTitle, optionTitle = "") {
-        const label = optionTitle ? `${areaTitle}: ${optionTitle}` : areaTitle;
+      function createTextarea(id, label) {
         return `
           <div class="field">
-            <label for="${id}">Your Interest / Collaboration Details</label>
-            <textarea id="${id}" data-label="${label}" placeholder="${placeholder}"></textarea>
+            <label for="${id}">${translations[currentLang].label_interest}</label>
+            <textarea id="${id}" data-label="${label}" placeholder="${translations[currentLang].placeholder}"></textarea>
           </div>
         `;
       }
 
-      function makeCard({ title, description, focus }, index, parentTitle = "", radioGroup = "") {
-        const id = slug(`${parentTitle} ${title}`);
+      function makeCard(option, index, parentTitle = "", radioGroup = "") {
+        const titleEn = typeof option.title === 'object' ? option.title.en : option.title;
+        const id = slug(`${parentTitle} ${titleEn}`);
         const card = document.createElement("article");
         card.className = "area-card";
         card.dataset.cardId = id;
         card.dataset.group = radioGroup;
+
+        const title = option.title[currentLang];
+        const desc = option.description[currentLang];
+
         card.innerHTML = `
           <button class="card-button" type="button" aria-expanded="false" aria-controls="body-${id}">
             <span class="number">${index}</span>
@@ -888,13 +1156,8 @@
           <div class="card-body" id="body-${id}">
             <div class="card-inner">
               <div class="body-content">
-                <p class="description">${description}</p>
-                ${
-                  focus
-                    ? `<ul class="focus-list">${focus.map((item) => `<li>${item}</li>`).join("")}</ul>`
-                    : ""
-                }
-                ${createTextarea(`details-${id}`, parentTitle || title, parentTitle ? title : "")}
+                <p class="description">${desc}</p>
+                ${createTextarea(`details-${id}`, title)}
               </div>
             </div>
           </div>
@@ -903,6 +1166,13 @@
         const button = card.querySelector(".card-button");
         const textarea = card.querySelector("textarea");
         button.addEventListener("click", () => toggleCard(card));
+
+        // Restore value if exists in state
+        if (state.has(id)) {
+          textarea.value = state.get(id);
+          card.classList.add("complete");
+        }
+
         textarea.addEventListener("input", () => {
           state.set(id, textarea.value.trim());
           card.classList.toggle("complete", Boolean(textarea.value.trim()));
@@ -922,6 +1192,7 @@
       }
 
       function renderAreas() {
+        areasList.innerHTML = "";
         areas.forEach((area, index) => {
           const panel = document.createElement("section");
           panel.className = "panel";
@@ -929,9 +1200,9 @@
           panel.innerHTML = `
             <div class="section-head">
               <div>
-                <div class="section-eyebrow">Area ${String(index + 1).padStart(2, "0")}</div>
-                <h2>${area.title}</h2>
-                <p class="section-note">You can select and describe multiple options in this section.</p>
+                <div class="section-eyebrow">${translations[currentLang].area_prefix} ${String(index + 1).padStart(2, "0")}</div>
+                <h2>${area.title[currentLang]}</h2>
+                <p class="section-note">${translations[currentLang].areas_note}</p>
               </div>
             </div>
             <div class="area-list sub-options"></div>
@@ -942,8 +1213,8 @@
               makeCard(
                 option,
                 `${index + 1}.${optionIndex + 1}`,
-                area.title,
-                slug(area.title),
+                area.title.en,
+                slug(area.title.en),
               ),
             );
           });
@@ -954,17 +1225,18 @@
       function validateCompany() {
         const fields = ["email", "companyName", "representative", "contact"];
         let valid = true;
+        const t = translations[currentLang];
         fields.forEach((name) => {
           const input = document.querySelector(`#${name}`);
           const error = document.querySelector(`[data-error-for="${name}"]`);
           const value = input.value.trim();
           let message = "";
-          if (!value) message = "This field is required.";
+          if (!value) message = t.req_field;
           if (name === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-            message = "Enter a valid business email address.";
+            message = t.invalid_email;
           }
           if (name === "contact" && value && !/^[+()\-\s0-9]{7,24}$/.test(value)) {
-            message = "Enter a valid phone or contact number.";
+            message = t.invalid_phone;
           }
           error.textContent = message;
           input.setAttribute("aria-invalid", String(Boolean(message)));
@@ -986,19 +1258,20 @@
 
       function updateProgress() {
         const count = getSelections().length;
-        const total = document.querySelectorAll("textarea").length;
-        const percentage = Math.round((count / total) * 100);
+        const total = document.querySelectorAll(".area-card").length;
+        const percentage = total > 0 ? Math.round((count / total) * 100) : 0;
         document.querySelector("#progressBar").style.width = `${percentage}%`;
-        document.querySelector("#progressText").textContent = `${count} completed`;
+        document.querySelector("#progressText").textContent = `${count} ${translations[currentLang].completed}`;
       }
 
       function generateReview() {
         const selected = getSelections();
+        const t = translations[currentLang];
         const company = {
-          "Company Name": document.querySelector("#companyName").value.trim() || "Not provided",
-          "Company Representative": document.querySelector("#representative").value.trim() || "Not provided",
-          Email: document.querySelector("#email").value.trim() || "Not provided",
-          "Contact Information": document.querySelector("#contact").value.trim() || "Not provided",
+          [t.label_company]: document.querySelector("#companyName").value.trim() || "-",
+          [t.label_rep]: document.querySelector("#representative").value.trim() || "-",
+          Email: document.querySelector("#email").value.trim() || "-",
+          [t.label_contact]: document.querySelector("#contact").value.trim() || "-",
         };
 
         const companyHtml = Object.entries(company)
@@ -1019,20 +1292,20 @@
                 <div class="selection">
                   <div class="selection-header">
                     <div class="selection-title">${escapeHtml(item.label)}</div>
-                    <button type="button" class="edit-link" data-edit="${item.id}">Edit</button>
+                    <button type="button" class="edit-link" data-edit="${item.id}" data-i18n="btn_edit_inline">Edit</button>
                   </div>
                   <div class="selection-detail">${escapeHtml(item.detail)}</div>
                 </div>
               `,
               )
               .join("")
-          : "<p class=\"section-note\">No collaboration areas have been completed yet.</p>";
+          : `<p class="section-note">${t.no_selection}</p>`;
 
         review.innerHTML = `
           <div class="review-grid">
             ${companyHtml}
             <div class="review-item wide">
-              <div class="review-label">Selected Collaboration Areas</div>
+              <div class="review-label">${t.sel_areas}</div>
               <div class="review-value">${selectionsHtml}</div>
             </div>
           </div>
@@ -1060,19 +1333,14 @@
       }
 
       function escapeHtml(value) {
-        return value.replace(/[&<>"']/g, (char) => {
-          return {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;",
-            "'": "&#039;",
-          }[char];
-        });
+        return value.replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;",
+        }[char]));
       }
 
       function getSubmissionPayload() {
         return {
+          lang: currentLang,
           companyName: document.querySelector("#companyName").value.trim(),
           representative: document.querySelector("#representative").value.trim(),
           email: document.querySelector("#email").value.trim(),
@@ -1093,21 +1361,19 @@
         }
       });
 
-      editFormBtn.addEventListener("click", () => {
-        hideModal();
-      });
+      editFormBtn.addEventListener("click", hideModal);
 
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        const valid = validateCompany();
-        if (!valid) {
+        const t = translations[currentLang];
+        if (!validateCompany()) {
           hideModal();
           document.querySelector("#company-section").scrollIntoView({ behavior: "smooth", block: "start" });
           return;
         }
         const submitButton = form.querySelector('[type="submit"]');
         submitButton.disabled = true;
-        submitButton.textContent = "Submitting...";
+        submitButton.textContent = t.submitting;
         try {
           const response = await fetch("/api/submit", {
             method: "POST",
@@ -1115,31 +1381,27 @@
             body: JSON.stringify(getSubmissionPayload()),
           });
           if (!response.ok) throw new Error("Submission failed");
-          toast.textContent = "Thank you. Your collaboration interest has been submitted to MOIL Limited.";
+          toast.textContent = t.toast_success;
           toast.classList.add("visible");
           toast.scrollIntoView({ behavior: "smooth", block: "center" });
           form.reset();
-          document.querySelectorAll(".area-card").forEach((card) => {
-            card.classList.remove("open", "complete");
-            card.querySelector(".card-button").setAttribute("aria-expanded", "false");
-          });
-          review.classList.remove("visible");
-          review.innerHTML = "";
-          updateProgress();
+          state.clear();
+          renderAreas();
           setTimeout(() => {
             hideModal();
             toast.classList.remove("visible");
           }, 3000);
         } catch (error) {
-          toast.textContent = "Submission could not be saved. Please contact MOIL Limited or try again.";
+          toast.textContent = t.toast_error;
           toast.classList.add("visible");
           toast.scrollIntoView({ behavior: "smooth", block: "center" });
         } finally {
           submitButton.disabled = false;
-          submitButton.textContent = "Confirm & Submit Collaboration Interest";
+          submitButton.textContent = t.btn_confirm;
         }
       });
 
+      updateUI();
       renderAreas();
       updateProgress();
     </script>
