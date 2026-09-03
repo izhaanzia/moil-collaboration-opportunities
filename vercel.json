@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/moil-collaboration-form.html"
+    },
+    {
+      "source": "/api/submit",
+      "destination": "/api/submit.js"
+    }
+  ]
+}
