@@ -1,9 +1,3 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/moil-collaboration-form.html"
-    }
-  ]
+  "cleanUrls": true
 }
